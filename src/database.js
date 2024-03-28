@@ -51,14 +51,23 @@ export class Database {
         if (rowIndex > -1) {
             this.#database[table].splice(rowIndex, 1);
             this.#persist();
+            return true;
         }
+        return false;
     }
 
     update(table, id, data) {
         const rowIndex = this.#database[table].findIndex((item) => item.id === id);
         if (rowIndex > -1) {
-            this.#database[table][rowIndex] = { id, ...data }
+            this.#database[table][rowIndex] = { id, ...this.#database[table][rowIndex], ...data }
             this.#persist();
+        }
+    }
+
+    find(table, id){
+        const rowIndex = this.#database[table].findIndex((item) => item.id === id);
+        if (rowIndex > -1) {
+            return this.#database[table][rowIndex];
         }
     }
 
